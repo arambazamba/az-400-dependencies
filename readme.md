@@ -6,7 +6,7 @@
 - Checkout commit with tag `project-using-feed` and explaing nuget.config and updated package ref
 
     `restore:`
-    
+
     ![restore-interactive](_images/restore-interactive.jpg)
 
     `*.csproj:`
@@ -21,4 +21,4 @@
         </ItemGroup>
     </Project>
     ```
-- Explain and run `consume-nuget-in-main-build`
+- Explain and run `consume-foodcalc.yaml`
