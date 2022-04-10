@@ -1,0 +1,56 @@
+name: "build-dependency"
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - food-calc/*
+
+pool:
+  vmImage: "ubuntu-20.04"
+
+variables:
+  proj: "M06-DependencyManagement"
+  feed: food-feed
+  folder: "food-calc"
+  dotnetSdkVersion: "6.x"
+  buildConfiguration: "Release"
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Use .NET Core SDK $(dotnetSdkVersion)"
+    inputs:
+      version: "$(dotnetSdkVersion)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Restore project dependencies"
+    inputs:
+      command: "restore"
+      projects: "$(folder)/FoodCalc.csproj"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Build the project - $(buildConfiguration)"
+    inputs:
+      command: "build"
+      arguments: "--no-restore --configuration $(buildConfiguration)"
+      projects: "$(folder)/FoodCalc.csproj"
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '$(folder)/FoodCalc.csproj'
+      versioningScheme: 'byPrereleaseNumber'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '0'
+    displayName: Create nuget package
+
+  - task: NuGetCommand@2
+    displayName: Publish nuget package
+    inputs:
+      command: push
+      publishVstsFeed: "$(proj)/$(feed)"
+      allowPackageConflicts: true
+    condition: succeeded()
