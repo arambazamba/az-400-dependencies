@@ -6,7 +6,7 @@ pool:
   vmImage: "ubuntu-20.04"
 
 variables:
-  proj: "M06-DependencyManagement"
+  proj: "M05-DependencyManagement"
   feed: food-feed
   folder: "food-api"
   dotnetSdkVersion: "6.0.x"
