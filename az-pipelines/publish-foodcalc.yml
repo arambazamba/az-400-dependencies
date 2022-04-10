@@ -36,23 +36,19 @@ steps:
     displayName: "Restore project dependencies"
     inputs:
       command: "restore"
-      projects: "$(folder)/FoodCalc.csproj"
+      projects: "$(folder)/food-calc.csproj"
 
   - task: DotNetCoreCLI@2
     displayName: "Build the project - $(buildConfiguration)"
     inputs:
       command: "build"
-      arguments: "--no-restore --configuration $(buildConfiguration)"
-      projects: "$(folder)/FoodCalc.csproj"
+      arguments: "--no-restore --configuration $(buildConfiguration) -p:Version=$(GitVersion.NuGetVersion)"
+      projects: "$(folder)/food-calc.csproj"
 
   - task: DotNetCoreCLI@2
     inputs:
       command: 'pack'
       packagesToPack: '$(folder)/food-calc.csproj'
-      versioningScheme: 'byPrereleaseNumber'
-      majorVersion: '1'
-      minorVersion: '0'
-      patchVersion: '0'
     displayName: Create nuget package
 
   - task: NuGetCommand@2
