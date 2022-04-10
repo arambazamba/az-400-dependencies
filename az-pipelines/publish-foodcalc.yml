@@ -3,7 +3,7 @@ name: "build-dependency"
 trigger:
   branches:
     include:
-      - main
+      - master
   paths:
     include:
       - food-calc/*
@@ -18,43 +18,47 @@ variables:
   dotnetSdkVersion: "6.x"
   buildConfiguration: "Release"
 
-steps:
-  - task: UseDotNet@2
-    displayName: "Use .NET Core SDK $(dotnetSdkVersion)"
-    inputs:
-      version: "$(dotnetSdkVersion)"
-  
-  - task: gitversion/setup@0
-    inputs:
-      versionSpec: '5.x'
+stages:
+- stage: "BuildToFeed"
+  jobs:
+  - job: "BuildToFeed"
+    displayName: "Build to Feed"
+    steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core SDK $(dotnetSdkVersion)"
+        inputs:
+          version: "$(dotnetSdkVersion)"
+      
+      - task: gitversion/setup@0
+        inputs:
+          versionSpec: '5.x'
 
-  - task: gitversion/execute@0
-    inputs:
-      updateAssemblyInfo: true
+      - task: gitversion/execute@0
+        inputs:
+          updateAssemblyInfo: true
 
-  - task: DotNetCoreCLI@2
-    displayName: "Restore project dependencies"
-    inputs:
-      command: "restore"
-      projects: "$(folder)/food-calc.csproj"
+      - task: DotNetCoreCLI@2
+        displayName: "Restore project dependencies"
+        inputs:
+          command: "restore"
+          projects: "$(folder)/food-calc.csproj"
 
-  - task: DotNetCoreCLI@2
-    displayName: "Build the project - $(buildConfiguration)"
-    inputs:
-      command: "build"
-      arguments: "--no-restore --configuration $(buildConfiguration) -p:Version=$(GitVersion.NuGetVersion)"
-      projects: "$(folder)/food-calc.csproj"
+      - task: DotNetCoreCLI@2
+        displayName: "Build the project - $(buildConfiguration)"
+        inputs:
+          command: "build"
+          arguments: "--no-restore --configuration $(buildConfiguration) -p:Version=$(GitVersion.SemVer)"
+          projects: "$(folder)/food-calc.csproj"
 
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'pack'
-      packagesToPack: '$(folder)/food-calc.csproj'
-    displayName: Create nuget package
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'pack'
+          packagesToPack: '$(folder)/food-calc.csproj'
+        displayName: Create nuget package
 
-  - task: NuGetCommand@2
-    displayName: Publish nuget package
-    inputs:
-      command: push
-      publishVstsFeed: "$(proj)/$(feed)"
-      allowPackageConflicts: true
-    condition: succeeded()
+      - task: NuGetCommand@2
+        displayName: Publish nuget package
+        inputs:
+          command: push
+          publishVstsFeed: "$(proj)/$(feed)"
+          allowPackageConflicts: true
