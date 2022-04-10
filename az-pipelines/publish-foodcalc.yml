@@ -54,6 +54,8 @@ stages:
         inputs:
           command: 'pack'
           packagesToPack: '$(folder)/food-calc.csproj'
+          versioningScheme: 'byEnvVar'
+          versionEnvVar: 'GitVersion.SemVer'
         displayName: Create nuget package
 
       - task: NuGetCommand@2
