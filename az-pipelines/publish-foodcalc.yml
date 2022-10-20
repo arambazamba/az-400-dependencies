@@ -12,7 +12,7 @@ pool:
   vmImage: "ubuntu-20.04"
 
 variables:
-  proj: "M05-DependencyManagement"
+  proj: "az-400"
   feed: food-feed
   folder: "food-calc"
   dotnetSdkVersion: "6.x"
@@ -29,13 +29,13 @@ stages:
         inputs:
           version: "$(dotnetSdkVersion)"
       
-      - task: gitversion/setup@0
-        inputs:
-          versionSpec: '5.x'
+      # - task: gitversion/setup@0
+      #   inputs:
+      #     versionSpec: '5.x'
 
-      - task: gitversion/execute@0
-        inputs:
-          updateAssemblyInfo: true
+      # - task: gitversion/execute@0
+      #   inputs:
+      #     updateAssemblyInfo: true
 
       - task: DotNetCoreCLI@2
         displayName: "Restore project dependencies"
