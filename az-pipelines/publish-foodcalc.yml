@@ -13,7 +13,7 @@ pool:
 
 variables:
   proj: "M05-DependencyManagement"
-  feed: food
+  feed: food-feed
   folder: "food-calc"
   dotnetSdkVersion: "6.x"
   buildConfiguration: "Release"
