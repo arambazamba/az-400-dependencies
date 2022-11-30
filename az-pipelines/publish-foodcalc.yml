@@ -47,15 +47,13 @@ stages:
         displayName: "Build the project - $(buildConfiguration)"
         inputs:
           command: "build"
-          arguments: "--no-restore --configuration $(buildConfiguration) -p:Version=$(GitVersion.SemVer)"
+          arguments: "--no-restore --configuration $(buildConfiguration)"
           projects: "$(folder)/food-calc.csproj"
 
       - task: DotNetCoreCLI@2
         inputs:
           command: 'pack'
           packagesToPack: '$(folder)/food-calc.csproj'
-          versioningScheme: 'byEnvVar'
-          versionEnvVar: 'GitVersion.SemVer'
         displayName: Create nuget package
 
       - task: NuGetCommand@2
