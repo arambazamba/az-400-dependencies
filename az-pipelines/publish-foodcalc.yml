@@ -13,7 +13,7 @@ pool:
 
 variables:
   proj: "az-400"
-  feed: food-feed
+  feed: foodapp
   folder: "food-calc"
   dotnetSdkVersion: "6.x"
   buildConfiguration: "Release"
@@ -59,6 +59,8 @@ stages:
       - task: NuGetCommand@2
         displayName: Publish nuget package
         inputs:
-          command: push
-          publishVstsFeed: "$(proj)/$(feed)"
+          command: 'push'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+          nuGetFeedType: 'internal'
+          publishVstsFeed: 'f2bbbb52-37bf-478e-9e11-f51f4e769e9c/cba58541-f64e-4f78-82ed-2ce223e71253'
           allowPackageConflicts: true
