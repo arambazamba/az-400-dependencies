@@ -13,7 +13,7 @@ pool:
 
 variables:
   proj: "az-400"
-  feed: food-feed
+  feed: food-feed2
   folder: "food-calc"
   dotnetSdkVersion: "6.x"
   buildConfiguration: "Release"
