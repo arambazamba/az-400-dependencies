@@ -28,14 +28,6 @@ stages:
         displayName: "Use .NET Core SDK $(dotnetSdkVersion)"
         inputs:
           version: "$(dotnetSdkVersion)"
-      
-      # - task: gitversion/setup@0
-      #   inputs:
-      #     versionSpec: '5.x'
-
-      # - task: gitversion/execute@0
-      #   inputs:
-      #     updateAssemblyInfo: true
 
       - task: DotNetCoreCLI@2
         displayName: "Restore project dependencies"
@@ -62,5 +54,5 @@ stages:
           command: 'push'
           packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
           nuGetFeedType: 'internal'
-          publishVstsFeed: '$(proj)/$(feed)'
+          publishVstsFeed: '76f7f796-5bbf-4bd6-a13b-61e0c1db5fe6/6c93f0d6-32f3-4379-80f5-683f136496ea'
           allowPackageConflicts: true
