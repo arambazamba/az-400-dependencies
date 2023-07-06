@@ -7,6 +7,5 @@ namespace FoodCalc
         public static decimal toPound(decimal Amount){
             return Amount * Convert.ToDecimal(0.00220462);
         }
-
     }
 }
